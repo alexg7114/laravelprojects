@@ -8,7 +8,7 @@ class WelcomeController extends Controller
 {
     public function index()
     {
-        return view('welcome1');
+        return view('/welcome/welcome1');
 
     }
 }

@@ -8,7 +8,7 @@ class CategoryNewsController extends Controller
 {
     public function index()
     {
-        return view('categoryNews');
+        return view('/categoryNews/categoryNews');
 
     }
 }
