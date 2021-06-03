@@ -35,7 +35,16 @@ class NewsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'title' => ['required']
+        ]);
+//        dd($request->all());
+//        $title = $request->input('title', 'default value');
+        $fields= $request->only(['title', 'description']);
+        dd($fields);
+//        $fields1= $request->except(['title', 'description']);
+//        dd($fields1);
+
     }
 
     /**
