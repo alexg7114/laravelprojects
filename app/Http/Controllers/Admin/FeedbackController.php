@@ -3,10 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Category;
 use Illuminate\Http\Request;
 
-class CategoryController extends Controller
+class FeedbackController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,10 +14,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $model = new Category();
-        dd($model->categoryList());
-
-        return view('admin.categories.index');
+        return view('admin.customers.feedback');
     }
 
     /**
@@ -28,7 +24,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.customers.feedback');
     }
 
     /**
@@ -39,7 +35,13 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'username' => ['required']
+        ]);
+
+        $fields= $request->only(['username', 'feedback']);
+        dd($fields);
+
     }
 
     /**

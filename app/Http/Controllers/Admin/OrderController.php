@@ -3,10 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Category;
 use Illuminate\Http\Request;
 
-class CategoryController extends Controller
+class OrderController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,10 +14,9 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $model = new Category();
-        dd($model->categoryList());
+        return view('admin.customers.order');
 
-        return view('admin.categories.index');
+
     }
 
     /**
@@ -28,7 +26,8 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.customers.order');
+
     }
 
     /**
@@ -39,8 +38,25 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'customername' => ['required']
+        ]);
+
+        $fields= $request->only(['customername', 'telephonenumber', 'email', 'information']);
+        dump($fields);
+//        dd($fields);
+
+        $filename = 'custtext.txt';
+        $text = serialize($fields);
+        echo $text;
+
+        file_put_contents($filename, $text);
+        $text1 = file_get_contents($filename);
+        echo $text1;
+
+
     }
+
 
     /**
      * Display the specified resource.
@@ -74,6 +90,7 @@ class CategoryController extends Controller
     public function update(Request $request, $id)
     {
         //
+
     }
 
     /**
