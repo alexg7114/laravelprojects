@@ -6,8 +6,6 @@ namespace Database\Seeders;
 use Faker\Factory;
 use Illuminate\Database\Seeder;
 
-use Illuminate\Support\Facades\DB;
-
 class SourcesSeeder extends Seeder
 {
     /**
