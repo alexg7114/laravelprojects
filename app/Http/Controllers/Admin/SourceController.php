@@ -3,27 +3,24 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Category;
+
+use App\Models\Source;
 use Illuminate\Http\Request;
 
-class CategoryController extends Controller
+class SourceController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\Response
      */
     public function index()
     {
+        $sources = Source::all();
 
-        $categories = Category::all();
-//        $model = new Category();
-//        $categories = $model->categoryList();
 
-//        dd($model->categoryList());
-
-        return view('admin.categories.index',[
-            'categories' => $categories
+        return view('admin.sources.index',[
+            'sources' => $sources
         ]);
     }
 
@@ -34,7 +31,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        return view('admin.categories.index');
+        return view('admin.sources.create');
     }
 
     /**
@@ -48,12 +45,9 @@ class CategoryController extends Controller
         $request->validate([
             'title' => ['required']
         ]);
-//        dd($request->all());
-//        $title = $request->input('title', 'default value');
+
         $fields= $request->only(['title', 'description']);
         dump($fields);
-//        $fields1= $request->except(['title', 'description']);
-//        dd($fields1);
 
     }
 
@@ -76,7 +70,7 @@ class CategoryController extends Controller
      */
     public function edit($id)
     {
-        return view('admin.categories.edit', [
+        return view('admin.sources.edit', [
             'id' => $id
         ]);
     }

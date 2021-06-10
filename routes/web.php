@@ -19,6 +19,7 @@ use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\Admin\NewsController as AdminNewsController;
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
+use App\Http\Controllers\Admin\SourceController as AdminSourceController;
 use App\Http\Controllers\Admin\FeedbackController as AdminFeedbackController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 
@@ -46,6 +47,7 @@ Route::get('/category/world', [WorldCategoryController::class, 'index'])
 
 Route::group(['prefix' => 'admin'], function () {
     Route::resource('/categories', AdminCategoryController::class);
+    Route::resource('/sources', AdminSourceController::class);
     Route::resource('/news', AdminNewsController::class);
     Route::resource('/customers/feedback', AdminFeedbackController::class);
     Route::resource('/customers/order', AdminOrderController::class);
@@ -54,11 +56,21 @@ Route::group(['prefix' => 'admin'], function () {
 
 Route::get('/news', [NewsController::class, 'index'])
     ->name('news');
-Route::get('/news/{id}', [NewsController::class, 'show'])
+Route::get('/news/{news}', [NewsController::class, 'show'])
     ->where('id', '\d+')
     ->name('news.show');
 
 Route::get('/about/', function() {
     return "This page is about laravel project Many News";
+});
+
+Route::get('/collections', function() {
+    $collection = collect([
+        10, 15, 20, 25, 30, 50, 75, 100
+    ]);
+
+    dd($collection->map(function ($item) {
+        return $item * 2;
+    }));
 });
 

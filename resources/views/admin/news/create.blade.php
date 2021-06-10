@@ -14,8 +14,34 @@
             <form method="post" action="{{ route('news.store') }}">
                 @csrf
                 <div class="form-group">
+                    <label for="category_id">Category</label>
+                    <select class="form-control" name="category_id" id="category_id">
+                        @foreach($categories as $category)
+                            <option value="{{ $category->id }}">{{ $category->title }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <form method="post" action="{{ route('news.store') }}">
+                    @csrf
+
+                <div class="form-group">
+                    <label for="source_id">Source</label>
+                    <select class="form-control" name="source_id" id="source_id">
+                        @foreach($sources as $source)
+                            <option value="{{ $source->id }}">{{ $source->title }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+
+                <div class="form-group">
                     <label for="title">Title</label>
-                    <input type="text" class="form-control" name="title" id="title" value="{{ old('title') }}">
+                    <input type="text" class="form-control" name="title" value="{{ old('title') }}">
+                </div>
+
+
+
                 </div>
                 <div class="form-group">
                     <label for="image">Logotype</label>

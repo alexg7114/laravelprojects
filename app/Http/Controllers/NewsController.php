@@ -2,25 +2,30 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\News;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 
 class NewsController extends Controller
 {
     public function index(Request $request)
     {
-//        dump($this->newsList);
-//        dd($this->newsList);
-//        dd(\request());
-//        dd(app());
+//        $model = new News();
+
         return view('news.index', [
-           'newsList' => $this->newsList
+            'newsList' => News::all()
+//           'newsList' => $model->newsList()
         ]);
     }
 
-    public function show(int $id)
+    public function show(News $news)
     {
+//        $news = News::findOrFail($id);
+//        $model = new News();
+//        $news = $model->news($id);
+
         return view('news.show', [
-            'id' => $id
+            'news' => $news
         ]);
     }
 }

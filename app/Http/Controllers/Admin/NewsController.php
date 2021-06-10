@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
+use App\Models\News;
+use App\Models\Source;
 use Illuminate\Http\Request;
 
 class NewsController extends Controller
@@ -14,7 +17,11 @@ class NewsController extends Controller
      */
     public function index()
     {
-        return view('admin.news.index');
+        $news = News::select(['id','category_id', 'source_id','title', 'created_at', 'status'])->paginate(5);
+
+        return view('admin.news.index', [
+            'newsList' => $news
+        ]);
     }
 
     /**
@@ -24,7 +31,12 @@ class NewsController extends Controller
      */
     public function create()
     {
-        return view('admin.news.create');
+        $categories = Category::all();
+        $sources = Source::all();
+        return view('admin.news.create', [
+           'categories' => $categories,
+            'sources' => $sources
+        ]);
     }
 
     /**
@@ -38,12 +50,17 @@ class NewsController extends Controller
         $request->validate([
             'title' => ['required']
         ]);
-//        dd($request->all());
-//        $title = $request->input('title', 'default value');
-        $fields= $request->only(['title', 'description']);
-        dd($fields);
-//        $fields1= $request->except(['title', 'description']);
-//        dd($fields1);
+
+        $fields= $request->only(['category_id', 'source_id','title', 'description', 'image']);
+        $fields['slug'] = \Str::slug($fields['title']);
+
+       $news = News::create($fields);
+        if($news) {
+            return redirect()->route('news.index');
+        }
+
+        return back();
+
 
     }
 
@@ -61,13 +78,18 @@ class NewsController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(News $news)
     {
+        $categories = Category::all();
+        $sources = Source::all();
         return view('admin.news.edit', [
-            'id' => $id
+            'news' => $news,
+            'categories' => $categories,
+            'sources' => $sources
+
         ]);
     }
 
@@ -75,12 +97,28 @@ class NewsController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  News $news
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, News $news)
     {
-        //
+        $request->validate([
+            'title' => ['required']
+        ]);
+
+        $fields= $request->only(['category_id', 'source_id','title', 'description', 'image', 'status']);
+        $fields['slug'] = \Str::slug($fields['title']);
+
+       $news = $news->fill($fields)->save();
+        if($news) {
+            return redirect()->route('news.index');
+        }
+
+        return back();
+
+//        $news->title = $request->input('title');
+//        $news->description = $request->input('description');
+//        $news->save();
     }
 
     /**
