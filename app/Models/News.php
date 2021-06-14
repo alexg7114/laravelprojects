@@ -16,6 +16,10 @@ class News extends Model
        'category_id', 'source_id','title', 'description', 'status'
     ];
 
+//    public static function create(array $fields)
+//    {
+//    }
+
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class, 'category_id');
