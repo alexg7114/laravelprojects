@@ -55,7 +55,9 @@ class NewsController extends Controller
 //            'description' => ['required'],
 //        ]);
 
-        $fields= $request->only(['category_id', 'source_id', 'title', 'description', 'image']);
+//        $fields= $request->only(['category_id', 'source_id', 'title', 'description', 'image']);
+
+        $fields= $request->validated();
         $fields['slug'] = \Str::slug($fields['title']);
 
        $news = News::create($fields);

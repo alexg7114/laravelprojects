@@ -22,6 +22,13 @@
                             @if($category->id === $news->category_id) selected @endif>{{ $category->title }}</option>
                         @endforeach
                     </select>
+                    @if($errors->has('category_id'))
+                        <div class="alert alert-danger">
+                            @foreach($errors->get('category_id') as $error)
+                                <p>{{ $error }}</p>
+                            @endforeach
+                        </div>
+                    @endif
                 </div>
 
                 <form method="post" action="{{ route('news.update', ['news' => $news]) }}">
@@ -42,8 +49,15 @@
                     <div class="form-group">
                         <label for="title">Title</label>
                         <input type="text" class="form-control" name="title" value="{{ $news->title }}">
+                        @error('title') Любая ошибка @enderror
+                        @if($errors->has('title'))
+                            <div class="alert alert-danger">
+                                @foreach($errors->get('title') as $error)
+                                    <p>{{ $error }}</p>
+                                @endforeach
+                            </div>
+                        @endif
                     </div>
-
 
 
         </div>
@@ -54,6 +68,13 @@
         <div class="form-group">
             <label for="description">Description</label>
             <textarea class="form-control" name="description" id="description">{!!  $news->description !!}</textarea>
+            @if($errors->has('description'))
+                <div class="alert alert-danger">
+                    @foreach($errors->get('description') as $error)
+                        <p>{{ $error }}</p>
+                    @endforeach
+                </div>
+            @endif
         </div>
 
         <div class="form-group">

@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,6 +18,7 @@ use App\Http\Controllers\CategoryNewsController;
 use App\Http\Controllers\WorldCategoryController;
 use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\NewsController;
+use App\Http\Controllers\Account\IndexController as AccountController;
 use App\Http\Controllers\Admin\NewsController as AdminNewsController;
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\SourceController as AdminSourceController;
@@ -45,14 +47,24 @@ Route::get('/category/world', [WorldCategoryController::class, 'index'])
 //    return "Welcome to the laravel " . $name;
 //});
 
-Route::group(['prefix' => 'admin'], function () {
+//account
+Route::group(['middleware' =>'auth'], function () {
+    Route::group(['prefix' => 'account'], function() {
+        Route::get('/',AccountController::class)->name('account');
+        Route::get('/logout', function() {
+            \Auth::logout();
+            return redirect()->route('login');
+        })->name('account.logout');
+    });
+    //admin
+Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function () {
     Route::resource('/categories', AdminCategoryController::class);
     Route::resource('/sources', AdminSourceController::class);
     Route::resource('/news', AdminNewsController::class);
     Route::resource('/customers/feedback', AdminFeedbackController::class);
     Route::resource('/customers/order', AdminOrderController::class);
 });
-
+});
 
 Route::get('/news', [NewsController::class, 'index'])
     ->name('news');
@@ -64,13 +76,26 @@ Route::get('/about/', function() {
     return "This page is about laravel project Many News";
 });
 
-Route::get('/collections', function() {
-    $collection = collect([
-        10, 15, 20, 25, 30, 50, 75, 100
-    ]);
+//Route::get('/collections', function() {
+//    $collection = collect([
+//        10, 15, 20, 25, 30, 50, 75, 100
+//    ]);
+//
+//    dd($collection->map(function ($item) {
+//        return $item * 2;
+//    }));
 
-    dd($collection->map(function ($item) {
-        return $item * 2;
-    }));
-});
+    Route::get('/sessions', function() {
+        session(['newssession' => 'example text']);
+        if(session()->has('newssession')) {
+            //dd(session()->get('newssession'));
+            session()->remove('newssession');
+            //dd(session()->all());
+        }
+        echo "Сессия не установлена";
 
+    });
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
