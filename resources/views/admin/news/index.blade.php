@@ -36,7 +36,7 @@
                     <td>{{ $news->status }}</td>
                     <td>{{ $news->created_at->format('d-m-Y H:i') }}</td>
                     <td><a href="{{ route('news.edit', ['news' => $news]) }}">Edit</a>&nbsp;||&nbsp;
-                        <a href="javascript:;" class="delete" rel="{{ $news->id }}">Delete</a></td>
+                        <a href="javascript:" class="delete" rel="{{ $news->id }}">Delete</a></td>
                 </tr>
             @empty
                 <tr>

@@ -1,5 +1,7 @@
 <?php
 
+
+
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -18,7 +20,10 @@ use App\Http\Controllers\CategoryNewsController;
 use App\Http\Controllers\WorldCategoryController;
 use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\NewsController;
+use App\Http\Controllers\ParserController;
+use App\Http\Controllers\SocialController;
 use App\Http\Controllers\Account\IndexController as AccountController;
+use App\Http\Controllers\Admin\ProfileController as AdminProfileController;
 use App\Http\Controllers\Admin\NewsController as AdminNewsController;
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\SourceController as AdminSourceController;
@@ -63,14 +68,18 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function () {
     Route::resource('/news', AdminNewsController::class);
     Route::resource('/customers/feedback', AdminFeedbackController::class);
     Route::resource('/customers/order', AdminOrderController::class);
+    Route::resource('/profile', AdminProfileController::class);
 });
 });
+
 
 Route::get('/news', [NewsController::class, 'index'])
     ->name('news');
 Route::get('/news/{news}', [NewsController::class, 'show'])
     ->where('id', '\d+')
     ->name('news.show');
+Route::match(['post', 'get'], '/profile', [AdminProfileController::class, 'index'])
+    ->name('profile');
 
 Route::get('/about/', function() {
     return "This page is about laravel project Many News";
@@ -99,3 +108,12 @@ Route::get('/about/', function() {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::get('/parser', [ParserController::class, 'index']);
+
+Route::group(['middleware' => 'guest'], function() {
+    Route::get('/login/vk', [SocialController::class, 'login'])
+        ->name('vk.login');
+    Route::get('/callback/vk', [SocialController::class, 'callback'])
+        ->name('vk.callback');
+});
