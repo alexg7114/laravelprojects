@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\NewsCreate;
 use App\Models\News;
+use App\Services\FileUploadService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 
@@ -28,4 +30,30 @@ class NewsController extends Controller
             'news' => $news
         ]);
     }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Exception
+     */
+    public function store(NewsCreate $request, FileUploadService $uploadService): \Illuminate\Http\RedirectResponse
+    {
+
+
+        $fields = $request->validated();
+        $fields['slug'] = \Str::slug($fields['title']);
+        $fields['image'] = $uploadService->upload($request);
+
+
+        $news = News::create($fields);
+        if ($news) {
+            return redirect()->route('news.index');
+        }
+
+        return back()->withInput();
+
+    }
+
 }

@@ -13,12 +13,15 @@ class News extends Model
     protected $table = "news";
 
     protected $fillable = [
-       'category_id', 'source_id','title', 'description', 'status'
+       'category_id', 'source_id','title', 'slug', 'image','description', 'status'
     ];
 
 //    public static function create(array $fields)
 //    {
 //    }
+    public static function create(array $fields)
+    {
+    }
 
     public function category(): BelongsTo
     {

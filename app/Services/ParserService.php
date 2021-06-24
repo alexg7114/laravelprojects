@@ -3,20 +3,25 @@
 
 namespace App\Services;
 
+use Illuminate\Support\Facades\Storage;
 use Orchestra\Parser\Xml\Facade as XmlParser;
 
 use App\Contracts\ParserServiceContract;
 
+
 class ParserService implements ParserServiceContract
 {
+
     /**
-     * @param string $url
-     * @return array
+     * @param string|null $url
+     *
      */
-    public function getNews(string $url): array
+    public function getNews(string $url):void
     {
-        $xml = XmlParser::load($url);
-        return $xml->parse([
+        $e = explode("/", $url);
+        $endElement = end($e);
+        $xml = \XmlParser::load($url);
+        $data = $xml->parse([
             'title' => [
                 'uses' => 'channel.title'
             ],
@@ -34,5 +39,12 @@ class ParserService implements ParserServiceContract
             ]
 
         ]);
+
+
+        $dataSerialize = serialize($data);
+
+
+
+        \Storage::append('parsing/' . $endElement . ".txt", $dataSerialize);
     }
 }

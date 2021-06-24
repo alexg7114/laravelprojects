@@ -11,7 +11,7 @@
                 @endforeach
             @endif
 
-            <form method="post" action="{{ route('news.update', ['news'=> $news]) }}">
+            <form method="post" action="{{ route('news.update', ['news'=> $news]) }}" enctype="multipart/form-data">
                 @csrf
                 @method('put')
                 <div class="form-group">
@@ -30,6 +30,7 @@
                         </div>
                     @endif
                 </div>
+
 
                 <form method="post" action="{{ route('news.update', ['news' => $news]) }}">
                     @csrf
@@ -59,12 +60,13 @@
                         @endif
                     </div>
 
-
         </div>
+
         <div class="form-group">
             <label for="image">Logotype</label>
             <input type="file" class="form-control" name="image" id="image">
         </div>
+
         <div class="form-group">
             <label for="description">Description</label>
             <textarea class="form-control" name="description" id="description">{!!  $news->description !!}</textarea>
@@ -97,4 +99,18 @@
     </div>
 
 @endsection
+
+@push('js')
+    <script src="https://cdn.ckeditor.com/ckeditor5/28.0.0/classic/ckeditor.js"></script>
+    <script type="text/javascript">
+        ClassicEditor
+            .create( document.querySelector( '#description' ) )
+            .then( editor => {
+                console.log( editor );
+            } )
+            .catch( error => {
+                console.error( error );
+            } );
+    </script>
+    @endpush
 

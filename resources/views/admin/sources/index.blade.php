@@ -29,7 +29,7 @@
                     <td>{{ $source->id }}</td>
                     <td>{{ $source->title }}</td>
                     <td>{{ $source->description }}</td>
-                    <td><a href="">Edit</a>&nbsp;||&nbsp;<a href="">Delete</a> </td>
+                    <td><a href="{{ route('sources.edit', ['source' => $source]) }}">Edit</a>&nbsp;||&nbsp;<a href="">Delete</a> </td>
                 </tr>
             @empty
                 <tr>

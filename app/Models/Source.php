@@ -14,9 +14,9 @@ class Source extends Model
 
     protected $primaryKey = "id";
 
-    public function news(): HasMany
+    public function source(): HasMany
     {
-        return $this->hasMany(News::class, 'source_id', 'id');
+        return $this->hasMany(Source::class, null, 'id');
     }
 
 }

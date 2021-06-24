@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 
+use App\Models\Category;
+use App\Models\News;
 use App\Models\Source;
 use Illuminate\Http\Request;
 
@@ -42,6 +44,19 @@ class SourceController extends Controller
      */
     public function store(Request $request)
     {
+
+        $fields= $request->validated();
+        $fields['slug'] = \Str::slug($fields['title']);
+
+
+        $news = Source::create($fields);
+        if($news) {
+            return redirect()->route('sources.index');
+        }
+
+        return back()->withInput();
+
+
         $request->validate([
             'title' => ['required']
         ]);
@@ -70,9 +85,17 @@ class SourceController extends Controller
      */
     public function edit($id)
     {
-        return view('admin.sources.edit', [
-            'id' => $id
-        ]);
+        {
+            $categories = Category::all();
+            $sources = Source::all();
+            return view('admin.sources.edit', [
+                'categories' => $categories,
+                'sources' => $sources
+
+            ]);
+        }
+
+
     }
 
     /**
@@ -84,7 +107,21 @@ class SourceController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'title' => ['required'],
+        ]);
+
+        $fields= $request->only(['title', 'description']);
+        $fields['slug'] = \Str::slug($fields['title']);
+
+
+        $source = $sources->fill($fields)->save();
+        if($source) {
+            return redirect()->route('sources.index')
+                ->with('success', 'Запись успешно обновлена');
+        }
+
+        return back();
     }
 
     /**
@@ -95,6 +132,9 @@ class SourceController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $status = $source->delete();
+        if($status) {
+            return response()->json(['ok' => 'ok']);
+        }
     }
 }

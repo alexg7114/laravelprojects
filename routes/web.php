@@ -30,6 +30,11 @@ use App\Http\Controllers\Admin\SourceController as AdminSourceController;
 use App\Http\Controllers\Admin\FeedbackController as AdminFeedbackController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 
+Route::get('/', function () {
+    return view('welcome');
+});
+
+
 
 Route::get('/test', [testController::class, 'index'])
     ->name('test');
